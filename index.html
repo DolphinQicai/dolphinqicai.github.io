@@ -15,8 +15,10 @@ function getLocation()
   }
 function showPosition(position)
   {
-  x.innerHTML="Latitude: " + position.coords.latitude + 
-  "<br />Longitude: " + position.coords.longitude;	
+    var Latitude = position.coords.latitude;
+    var Longitude = position.coords.longitude;
+  x.innerHTML="Latitude: " + Math.floor(Latitude) + "°" + (Latitude - Math.floor(Latitude)) * 60 + 
+  "<br />Longitude: " + Math.floor(position.coords.longitude) + "°" + (Longitude - Math.floor(Longitude)) * 60;	
   }
 function showError(error)
   {
