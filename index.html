@@ -19,10 +19,10 @@ function showPosition(position)
     var Longitude = position.coords.longitude;
     var Latitude_degree = Math.floor(Latitude);
     var Latitude_minute = Math.floor((Latitude - Math.floor(Latitude_degree)) * 60);
-    var Latitude_second = ((Latitude_degree - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
+    var Latitude_second = ((Latitude - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
     var Longitude_degree = Math.floor(Longitude);
     var Longitude_minute = Math.floor((Longitude - Math.floor(Longitude_degree)) * 60);
-    var Longitude_second = ((Longitude_degree - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
+    var Longitude_second = ((Longitude - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
   x.innerHTML="Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″" + 
   "<br />Longitude: " + Longitude_degree + "°" + Longitude_minute + "′" + Longitude_second + "″";
   }
