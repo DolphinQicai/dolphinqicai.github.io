@@ -17,7 +17,7 @@ function showPosition(position)
   {
     var Latitude = position.coords.latitude;
     var Longitude = position.coords.longitude;
-    var Altitude = position.coords.altitude;
+    var Altitude = Math.floor(position.coords.altitude);
     var Heading = position.coords.heading;
     var Speed = position.coords.speed;
     var Latitude_degree = Math.floor(Latitude);
