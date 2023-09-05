@@ -21,7 +21,7 @@ function showPosition(position)
     var Longitude_degree = Math.floor(position.coords.latitude);
     var Longitude_minute = Math.floor((Longitude_degree - Math.floor(Longitude_degree)) * 60);
     var Longitude_second = ((Longitude_degree - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
-  x.innerHTML="Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″"
+  x.innerHTML="Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″" + 
   "<br />Longitude: " + Longitude_degree + "°" + Longitude_minute + "′" + Longitude_second + "″";
   }
 function showError(error)
