@@ -6,50 +6,81 @@
 <script>
 var x=document.getElementById("demo");
 function getLocation()
-  {
-  if (navigator.geolocation)
+{
+    if (navigator.geolocation)
     {
-    navigator.geolocation.getCurrentPosition(showPosition,showError);
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
     }
-  else{x.innerHTML="Geolocation is not supported by this browser.";}
-  }
+    else{x.innerHTML="Geolocation is not supported by this browser.";}
+}
 function showPosition(position)
-  {
-    var Latitude = position.coords.latitude;
-    var Longitude = position.coords.longitude;
-    var Altitude = Math.floor(position.coords.altitude);
-    var Heading = position.coords.heading;
-    var Speed = position.coords.speed;
-    var Latitude_degree = Math.floor(Latitude);
-    var Latitude_minute = Math.floor((Latitude - Math.floor(Latitude_degree)) * 60);
-    var Latitude_second = ((Latitude - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
-    var Longitude_degree = Math.floor(Longitude);
-    var Longitude_minute = Math.floor((Longitude - Math.floor(Longitude_degree)) * 60);
-    var Longitude_second = ((Longitude - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
-  x.innerHTML="Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″" + 
-  "<br />Longitude: " + Longitude_degree + "°" + Longitude_minute + "′" + Longitude_second + "″" + 
-    "<br />Altitude: " + Altitude + 
-    "<br />Heading: " + Heading + 
-    "<br />Speed: " + Speed;
-  }
+{
+        var Latitude = position.coords.latitude;
+        var Longitude = position.coords.longitude;
+        var Altitude = position.coords.altitude;
+        var Heading = position.coords.heading;
+        var Speed = position.coords.speed;
+        alert(Speed);
+        var Latitude_degree = Math.floor(Latitude);
+        var Latitude_minute = Math.floor((Latitude - Math.floor(Latitude_degree)) * 60);
+        var Latitude_second = ((Latitude - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
+        var Longitude_degree = Math.floor(Longitude);
+        var Longitude_minute = Math.floor((Longitude - Math.floor(Longitude_degree)) * 60);
+        var Longitude_second = ((Longitude - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
+        x.innerHTML="Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″" + 
+            "<br />Longitude: " + Longitude_degree + "°" + Longitude_minute + "′" + Longitude_second + "″" + 
+            "<br />Altitude: " + Altitude + 
+            "<br />Heading: " + Heading + 
+            "<br />Speed: " + Speed;
+
+        var httpRequest = new XMLHttpRequest();
+        var url = "http://81.70.9.7:8080/send"
+        var keyword = '114514'
+        var name = '1919810'
+        httpRequest.open("POST",url,true);
+        httpRequest.setRequestHeader("Content-Type","application/json");
+        // httpRequest.send("keyword="+keyword+"&name="+name);
+        var data = {
+            key1 : keyword,
+            key2 : name
+        };
+        var requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, requestOptions)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data);
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+
+}
 function showError(error)
-  {
-  switch(error.code) 
+{
+    switch(error.code) 
     {
-    case error.PERMISSION_DENIED:
-      x.innerHTML="User denied the request for Geolocation."
-      break;
-    case error.POSITION_UNAVAILABLE:
-      x.innerHTML="Location information is unavailable."
-      break;
-    case error.TIMEOUT:
-      x.innerHTML="The request to get user location timed out."
-      break;
-    case error.UNKNOWN_ERROR:
-      x.innerHTML="An unknown error occurred."
-      break;
+        case error.PERMISSION_DENIED:
+            x.innerHTML="User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML="Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML="The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML="An unknown error occurred."
+            break;
     }
-  }
+}
 </script>
 </body>
 </html>
