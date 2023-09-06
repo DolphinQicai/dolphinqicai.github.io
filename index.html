@@ -9,18 +9,32 @@ function getLocation()
 {
     if (navigator.geolocation)
     {
-        navigator.geolocation.getCurrentPosition(showPosition,showError);
+        // navigator.geolocation.getCurrentPosition(showPosition,showError);
+        get_CurrentPosition();
+        setInterval(get_CurrentPosition, 10000);
+        // position = navigator.geolocation.getCurrentPosition(showPosition);
+        // showPosition(position);
+        // console.log(position);
+        // var Latitude = position.coords.latitude;
+        // var Longitude = position.coords.longitude;
+        // send(Latitude, Longitude);
     }
     else{x.innerHTML="Geolocation is not supported by this browser.";}
+}
+function get_CurrentPosition()
+{
+    navigator.geolocation.getCurrentPosition(showPosition,showError);
 }
 function showPosition(position)
 {
         var Latitude = position.coords.latitude;
         var Longitude = position.coords.longitude;
+        var time = position.timestamp;
+        console.log({Latitude, Longitude})
         var Altitude = position.coords.altitude;
         var Heading = position.coords.heading;
         var Speed = position.coords.speed;
-        alert(Speed);
+        // alert(Speed);
         var Latitude_degree = Math.floor(Latitude);
         var Latitude_minute = Math.floor((Latitude - Math.floor(Latitude_degree)) * 60);
         var Latitude_second = ((Latitude - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
@@ -33,34 +47,11 @@ function showPosition(position)
             "<br />Heading: " + Heading + 
             "<br />Speed: " + Speed;
 
-        var httpRequest = new XMLHttpRequest();
-        var url = "http://81.70.9.7:8080/send"
-        var keyword = '114514'
-        var name = '1919810'
-        httpRequest.open("POST",url,true);
-        httpRequest.setRequestHeader("Content-Type","application/json");
-        // httpRequest.send("keyword="+keyword+"&name="+name);
-        var data = {
-            key1 : keyword,
-            key2 : name
-        };
-        var requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, requestOptions)
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                console.log(data);
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-            });
+        console.log('************');
+        send(Latitude, Longitude, time);
+
+        // return Latitude
+        
 
 }
 function showError(error)
@@ -81,6 +72,40 @@ function showError(error)
             break;
     }
 }
+function send(x, y, time)
+{
+    var httpRequest = new XMLHttpRequest();
+    var url = "http://81.70.9.7:8080/send"
+    var keyword = '114514'
+    var name = '1919810'
+    httpRequest.open("POST",url,true);
+    httpRequest.setRequestHeader("Content-Type","application/json");
+    // httpRequest.send("keyword="+keyword+"&name="+name);
+    var data = {
+        Latitude : x,
+        Longitude : y,
+        Time : time
+    };
+    var requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch(url, requestOptions)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+        });
+}
 </script>
 </body>
 </html>
+
+
