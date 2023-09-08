@@ -1,111 +1,136 @@
 <!DOCTYPE html>
 <html>
+
 <body>
-<p id="demo">点击这个按钮，获得您的坐标：</p>
-<button onclick="getLocation()">试一下</button>
-<script>
-var x=document.getElementById("demo");
-function getLocation()
-{
-    if (navigator.geolocation)
-    {
-        // navigator.geolocation.getCurrentPosition(showPosition,showError);
-        get_CurrentPosition();
-        setInterval(get_CurrentPosition, 10000);
-        // position = navigator.geolocation.getCurrentPosition(showPosition);
-        // showPosition(position);
-        // console.log(position);
-        // var Latitude = position.coords.latitude;
-        // var Longitude = position.coords.longitude;
-        // send(Latitude, Longitude);
-    }
-    else{x.innerHTML="Geolocation is not supported by this browser.";}
-}
-function get_CurrentPosition()
-{
-    navigator.geolocation.getCurrentPosition(showPosition,showError);
-}
-function showPosition(position)
-{
-        var Latitude = position.coords.latitude;
-        var Longitude = position.coords.longitude;
-        var time = position.timestamp;
-        console.log({Latitude, Longitude})
-        var Altitude = position.coords.altitude;
-        var Heading = position.coords.heading;
-        var Speed = position.coords.speed;
-        // alert(Speed);
-        var Latitude_degree = Math.floor(Latitude);
-        var Latitude_minute = Math.floor((Latitude - Math.floor(Latitude_degree)) * 60);
-        var Latitude_second = ((Latitude - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
-        var Longitude_degree = Math.floor(Longitude);
-        var Longitude_minute = Math.floor((Longitude - Math.floor(Longitude_degree)) * 60);
-        var Longitude_second = ((Longitude - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
-        x.innerHTML="Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″" + 
-            "<br />Longitude: " + Longitude_degree + "°" + Longitude_minute + "′" + Longitude_second + "″" + 
-            "<br />Altitude: " + Altitude + 
-            "<br />Heading: " + Heading + 
-            "<br />Speed: " + Speed;
+    <input type="text" id="textInput" placeholder="Your Name">
+    <p id="demo">Send Your Position</p>
+    <button onclick="getLocation()">Click Here</button>
+    <script>
+        var x = document.getElementById("demo");
 
-        console.log('************');
-        send(Latitude, Longitude, time);
+        function getLocation()
+        {
+            if (navigator.geolocation)
+            {
+                get_CurrentPosition();
+                // setInterval(get_CurrentPosition, 10000);
 
-        // return Latitude
-        
+            }
+            else
+            {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
 
-}
-function showError(error)
-{
-    switch(error.code) 
-    {
-        case error.PERMISSION_DENIED:
-            x.innerHTML="User denied the request for Geolocation."
-            break;
-        case error.POSITION_UNAVAILABLE:
-            x.innerHTML="Location information is unavailable."
-            break;
-        case error.TIMEOUT:
-            x.innerHTML="The request to get user location timed out."
-            break;
-        case error.UNKNOWN_ERROR:
-            x.innerHTML="An unknown error occurred."
-            break;
-    }
-}
-function send(x, y, time)
-{
-    var httpRequest = new XMLHttpRequest();
-    var url = "http://81.70.9.7:8080/send"
-    var keyword = '114514'
-    var name = '1919810'
-    httpRequest.open("POST",url,true);
-    httpRequest.setRequestHeader("Content-Type","application/json");
-    // httpRequest.send("keyword="+keyword+"&name="+name);
-    var data = {
-        Latitude : x,
-        Longitude : y,
-        Time : time
-    };
-    var requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    };
-    fetch(url, requestOptions)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            console.log(data);
-        })
-        .catch(function(error) {
-            console.error('Error:', error);
-        });
-}
-</script>
+        function get_CurrentPosition()
+        {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        }
+
+        function showPosition(position)
+        {
+            var Latitude = position.coords.latitude;
+            var Longitude = position.coords.longitude;
+            var time = position.timestamp;
+            console.log({ Latitude, Longitude })
+            var Altitude = position.coords.altitude;
+            var Heading = position.coords.heading;
+            var Speed = position.coords.speed;
+            // alert(Speed);
+            var Latitude_degree = Math.floor(Latitude);
+            var Latitude_minute = Math.floor((Latitude - Math.floor(Latitude_degree)) * 60);
+            var Latitude_second = ((Latitude - Math.floor(Latitude_degree)) * 60 - Latitude_minute) * 60;
+            var Longitude_degree = Math.floor(Longitude);
+            var Longitude_minute = Math.floor((Longitude - Math.floor(Longitude_degree)) * 60);
+            var Longitude_second = ((Longitude - Math.floor(Longitude_degree)) * 60 - Longitude_minute) * 60;
+            var currentTime = getTime();
+            x.innerHTML = "Current Time: " + currentTime +
+                "<br />Latitude: " + Latitude_degree + "°" + Latitude_minute + "′" + Latitude_second + "″" +
+                "<br />Longitude: " + Longitude_degree + "°" + Longitude_minute + "′" + Longitude_second + "″" +
+                "<br />Altitude: " + Altitude +
+                "<br />Heading: " + Heading +
+                "<br />Speed: " + Speed;
+
+            console.log('************');
+
+            var name_input = document.getElementById('textInput').value;
+            send(Latitude, Longitude, time, name_input);
+        }
+
+        function getTime()
+        {
+            var currentDate = new Date();
+            var currentYear = currentDate.getFullYear();
+            var currentMonth = currentDate.getMonth() + 1;
+            var currentDay = currentDate.getDate();
+            var currentHour = currentDate.getHours();
+            var currentMinute = currentDate.getMinutes();
+            var currentSecond = currentDate.getSeconds();
+            var currentMillisecond = currentDate.getMilliseconds();
+            var currentDayOfWeek = currentDate.getDay();
+            var currentTimeStamp = currentDate.getTime();
+            var formattedTime = currentYear + "-" + currentMonth + "-" + currentDay + " " + currentHour + ":" + currentMinute + ":" + currentSecond;
+            console.log("当前时间：" + formattedTime);
+            
+            return formattedTime;
+        }
+
+        function showError(error)
+        {
+            switch (error.code)
+            {
+                case error.PERMISSION_DENIED:
+                    x.innerHTML = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    x.innerHTML = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    x.innerHTML = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    x.innerHTML = "An unknown error occurred."
+                    break;
+            }
+        }
+
+        function send(x, y, time, text)
+        {
+            var httpRequest = new XMLHttpRequest();
+            var url = "http://81.70.9.7:8080/send"
+            var keyword = '114514'
+            var name = '1919810'
+            httpRequest.open("POST", url, true);
+            httpRequest.setRequestHeader("Content-Type", "application/json");
+            // httpRequest.send("keyword="+keyword+"&name="+name);
+            var data = {
+                Latitude: x,
+                Longitude: y,
+                Time: time,
+                Text: text
+            };
+            var requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            };
+            fetch(url, requestOptions)
+                .then(function (response)
+                {
+                    return response.json();
+                })
+                .then(function (data)
+                {
+                    console.log(data);
+                })
+                .catch(function (error)
+                {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 </body>
+
 </html>
-
-
